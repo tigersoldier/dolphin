@@ -371,6 +371,9 @@ void HotkeyScheduler::Run()
         case AspectMode::AnalogWide:
           OSD::AddMessage("Force 16:9");
           break;
+        case AspectMode::AnalogFit:
+          OSD::AddMessage("Fit 4:3 (RESHDP)");
+          break;
         case AspectMode::Auto:
         default:
           OSD::AddMessage("Auto");

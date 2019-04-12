@@ -543,6 +543,11 @@ void Renderer::DrawDebugText()
 
 float Renderer::CalculateDrawAspectRatio() const
 {
+  if (g_ActiveConfig.aspect_mode == AspectMode::AnalogFit)
+  {
+    return 4.0f / 3.0f;
+  }
+
   if (g_ActiveConfig.aspect_mode == AspectMode::Stretch)
   {
     // If stretch is enabled, we prefer the aspect ratio of the window.
@@ -700,6 +705,9 @@ void Renderer::UpdateDrawRectangle()
       break;
     case AspectMode::AnalogWide:
       target_aspect = AspectToWidescreen(VideoInterface::GetAspectRatio());
+      break;
+    case AspectMode::AnalogFit:
+      target_aspect = 4.0f / 3.0f;
       break;
     case AspectMode::Auto:
     default:

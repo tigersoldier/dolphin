@@ -66,7 +66,7 @@ void GeneralPane::CreateLayout()
   // Create layout here
   CreateBasic();
 
-  if (AutoUpdateChecker::SystemSupportsAutoUpdates())
+   if (AutoUpdateChecker::SystemSupportsAutoUpdates())
     CreateAutoUpdate();
 
 #if defined(USE_ANALYTICS) && USE_ANALYTICS

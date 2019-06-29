@@ -203,6 +203,7 @@ std::string HiresTexture::GenBaseName(const u8* texture, size_t texture_size, co
   // checking for min/max on paletted textures
   u32 min = 0xffff;
   u32 max = 0;
+
   switch (tlut_size)
   {
   case 0:
@@ -247,15 +248,26 @@ std::string HiresTexture::GenBaseName(const u8* texture, size_t texture_size, co
   u64 tex_hash = XXH64(texture, texture_size, 0);
   u64 tlut_hash = tlut_size ? XXH64(tlut, tlut_size, 0) : 0;
 
-  std::string basename = s_format_prefix + StringFromFormat("%dx%d%s_%016" PRIx64, width, height,
-                                                            has_mipmaps ? "_m" : "", tex_hash);
+  // std::string basename = s_format_prefix + StringFromFormat("%dx%d%s_%016" PRIx64, width, height,
+  //                                                          has_mipmaps ? "_m" : "", tex_hash);
+
+  std::string basename =
+      s_format_prefix + StringFromFormat("%dx%d%s", width, height, has_mipmaps ? "_m" : "");
+
+  // RESHDP Hack - Separate the texname from the basename
+  std::string texname = StringFromFormat("_%016" PRIx64, tex_hash);
+
   std::string tlutname = tlut_size ? StringFromFormat("_%016" PRIx64, tlut_hash) : "";
   std::string formatname = StringFromFormat("_%d", static_cast<int>(format));
-  std::string fullname = basename + tlutname + formatname;
+  std::string fullname = basename + texname + tlutname + formatname;
 
   // try to match a wildcard template
-  if (!dump && s_textureMap.find(basename + "_$" + formatname) != s_textureMap.end())
-    return basename + "_$" + formatname;
+  if (!dump && s_textureMap.find(basename + texname + "_$" + formatname) != s_textureMap.end())
+    return basename + texname + "_$" + formatname;
+
+  // RESHDP Hack - try to match the TLUT wildcard template (RE games / RESHDP ONLY)
+  if (!dump && s_textureMap.find(basename + "_$" + tlutname + formatname) != s_textureMap.end())
+    return basename + "_$" + tlutname + formatname;
 
   // else generate the complete texture
   if (dump || s_textureMap.find(fullname) != s_textureMap.end())

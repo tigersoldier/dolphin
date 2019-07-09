@@ -45,6 +45,13 @@ public:
   };
   std::vector<Level> m_levels;
 
+  struct ReThreeMaskHackTlutToId
+  {
+    std::string id;
+    std::string tlut;
+    std::string tlut_alt;
+  };
+
 private:
   static std::unique_ptr<HiresTexture> Load(const std::string& base_filename, u32 width,
                                             u32 height);
@@ -54,6 +61,12 @@ private:
   static void Prefetch();
 
   static std::string GetTextureDirectory(const std::string& game_id);
+
+  static void ReThreeMaskHack(const std::string& texname, std::string& tlutname, u32 width);
+  static void ReThreeMaskHackInit();
+
+  //static void ReThreeRoomIdOsd(const std::string& fullname, u32 width);
+  //static void ReThreeRoomIdOsdInit();
 
   HiresTexture() {}
   bool m_has_arbitrary_mipmaps;
